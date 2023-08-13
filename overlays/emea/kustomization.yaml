@@ -3,9 +3,9 @@ kind: Kustomization
 bases:
   - ../../base
 
-#resources:
+resources:
 #- dbclaim-pvc.yaml
-#- route.yaml
+- route-mng.yaml
 nameSuffix: -emea
 
 images:
