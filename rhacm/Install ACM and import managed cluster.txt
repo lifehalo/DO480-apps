@@ -56,3 +56,11 @@ oc create -f import.yaml
 oc get pod -n open-cluster-management-agent
 
 watch oc get pod -n open-cluster-management-agent-addon
+
+(Wait up to 10 mins)
+
+Log back in to hub cluster
+
+oc login -u admin -p redhat api.ocp4.example.com:6443
+
+oc get managedcluster
