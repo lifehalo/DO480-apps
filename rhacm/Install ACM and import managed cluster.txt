@@ -1,0 +1,66 @@
+Install ACM
+======================
+oc new-project open-cluster-management
+
+oc create -f operator-group.yaml
+
+oc create -f subscription.yaml
+
+watch oc get csv
+
+
+Create multiclusterhub
+==========================
+
+oc create -f mch.yaml
+
+watch oc get multiclusterhub
+
+
+Prepare to Import Managed Cluster
+===========================
+
+oc new-project managed-cluster
+
+oc label namespace managed-cluster \
+  cluster.open-cluster-management.io/managedCluster=managed-cluster
+
+
+oc create -f mngcluster.yaml
+
+oc create -f klusterlet.yaml
+
+
+Generate the files to import managed cluster
+===================================================
+
+oc get secret managed-cluster-import \
+  -n managed-cluster -o jsonpath={.data.crds\\.yaml} | base64 \
+  --decode > klusterlet-crd.yaml
+
+oc get secret managed-cluster-import \
+  -n managed-cluster -o jsonpath={.data.import\\.yaml} | base64 \
+  --decode > import.yaml
+
+
+On the managed cluster
+=========================
+
+oc login -u admin -p redhat https://api.ocp4-mng.example.com:6443
+
+oc create -f klusterlet-crd.yaml
+
+oc create -f import.yaml
+
+
+oc get pod -n open-cluster-management-agent
+
+watch oc get pod -n open-cluster-management-agent-addon
+
+(Wait up to 10 mins)
+
+Log back in to hub cluster
+
+oc login -u admin -p redhat api.ocp4.example.com:6443
+
+oc get managedcluster
