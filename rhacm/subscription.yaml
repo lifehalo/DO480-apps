@@ -6,5 +6,5 @@ spec:
   sourceNamespace: openshift-marketplace
   source: do480-catalog
   channel: release-2.4
-  installPlanApproval: Manual
+  installPlanApproval: Automatic
   name: advanced-cluster-management
